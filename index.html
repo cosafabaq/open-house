@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open House - Colegio de la Sagrada Familia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-navy: #0a2445;
+            --color-red: #be1a21;
+            --color-white: #ffffff;
+            --color-accent: #efcf66;
+            --bg-light: #f4f7f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-white);
+            color: var(--color-navy);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar / Menú Lateral */
+        #sidebar {
+            width: 250px;
+            background-color: var(--color-navy);
+            color: var(--color-white);
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        #sidebar a, #sidebar button {
+            background: none;
+            border: none;
+            color: var(--color-white);
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #sidebar a:hover, #sidebar button:hover {
+            background-color: var(--color-red);
+            color: var(--color-white);
+        }
+
+        /* Contenido Principal */
+        #main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--color-white);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 4px solid var(--color-accent);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--color-navy);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        header img {
+            height: 80px;
+            margin-right: 20px;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            color: var(--color-navy);
+        }
+
+        .header-text p {
+            font-size: 1rem;
+            color: var(--color-red);
+            font-style: italic;
+        }
+
+        /* Secciones */
+        .section-container {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* Home View */
+        #home-view {
+            text-align: center;
+        }
+
+        #home-view img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-red);
+            color: var(--color-white);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: #9a151b;
+            transform: translateY(-2px);
+        }
+
+        /* Formulario */
+        #form-view {
+            display: none;
+            background-color: var(--color-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-navy);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-navy);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .companion-card {
+            background-color: var(--bg-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-accent);
+            color: var(--color-navy);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* Mensaje de Éxito */
+        #success-view {
+            display: none;
+            text-align: left;
+            background-color: var(--bg-light);
+            padding: 40px;
+            border-radius: 8px;
+            border-left: 6px solid var(--color-navy);
+        }
+
+        #success-view h2 {
+            color: var(--color-red);
+            margin-bottom: 15px;
+        }
+
+        .summary-box {
+            background: var(--color-white);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Modal simple para misión/dirección */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 36, 69, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--color-white);
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal-close {
+            margin-top: 20px;
+            background: var(--color-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Responsividad Móvil */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.active {
+                transform: translateX(0);
+            }
+            #main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .header-text h1 {
+                font-size: 1.2rem;
+            }
+            .header-text p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú Lateral -->
+    <aside id="sidebar">
+        <button onclick="showModal('Misión', 'Nuestra misión es acompañar con amor y educar el corazón de nuestros estudiantes, formando líderes íntegros y comprometidos con la sociedad.')">Misión del Colegio</button>
+        <button onclick="showModal('Dirección', 'Colegio de la Sagrada Familia<br>Barranquilla, Colombia')">Dirección</button>
+        <a href="https://www.colegiosagradafamilia.edu.co" target="_blank">Página Principal</a>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <div id="main-content">
+        <header>
+            <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <img src="imagenLogo.png" alt="Logo Colegio de la Sagrada Familia" onerror="this.src='https://via.placeholder.com/80?text=Logo'">
+            <div class="header-text">
+                <h1>Colegio de la Sagrada Familia</h1>
+                <p>Acompañando con amor, educamos el corazón</p>
+            </div>
+        </header>
+
+        <div class="section-container">
+            <!-- Pantalla Inicio -->
+            <section id="home-view">
+                <img src="imagenHome.jpg" alt="Open House" onerror="this.src='https://via.placeholder.com/600x400?text=Imagen+Home'">
+                <br>
+                <button class="btn-primary" onclick="showForm()">Reserva Asistencia</button>
+            </section>
+
+            <!-- Formulario -->
+            <section id="form-view">
+                <h2 style="color: var(--color-navy); margin-bottom: 20px;">Formulario de Inscripción - Open House</h2>
+                <form id="reservation-form">
+                    
+                    <!-- Datos del Aspirante -->
+                    <div class="form-group">
+                        <label for="aspiranteNombre">Nombre completo del aspirante</label>
+                        <input type="text" id="aspiranteNombre" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="aspiranteGrado">Grado al que aspira</label>
+                        <select id="aspiranteGrado" required>
+                            <option value="">Seleccione un grado</option>
+                            <option value="1°">1°</option>
+                            <option value="2°">2°</option>
+                            <option value="3°">3°</option>
+                            <option value="4°">4°</option>
+                            <option value="5°">5°</option>
+                            <option value="6°">6°</option>
+                            <option value="7°">7°</option>
+                            <option value="8°">8°</option>
+                            <option value="9°">9°</option>
+                            <option value="10°">10°</option>
+                            <option value="11°">11°</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aspiranteEdad">Edad</label>
+                        <input type="number" id="aspiranteEdad" min="4" max="20" required>
+                    </div>
+
+                    <!-- Acompañantes -->
+                    <div id="companions-container"></div>
+                    <button type="button" class="btn-secondary" id="btn-add-companion" onclick="addCompanion()">+ Añadir Acompañante (Máx. 3)</button>
+
+                    <!-- Fuente de información -->
+                    <div class="form-group">
+                        <label for="fuenteInformacion">¿Cómo se enteró del Open House?</label>
+                        <select id="fuenteInformacion" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Redes sociales">Redes sociales</option>
+                            <option value="Recomendación">Recomendación</option>
+                            <option value="Folleto">Folleto</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%;">Enviar Reserva</button>
+                </form>
+            </section>
+
+            <!-- Mensaje de Éxito -->
+            <section id="success-view">
+                <h2>¡Reserva Confirmada con Éxito!</h2>
+                <p>Nos llena de mucha alegría saber que nos acompañarán. Hemos registrado sus datos cuidadosamente y los esperamos con los brazos abiertos para compartir nuestra filosofía.</p>
+                
+                <div class="summary-box" id="summary-content">
+                    <!-- Contenido dinámico -->
+                </div>
+
+                <div class="summary-box" style="background-color: var(--color-navy); color: var(--color-white);">
+                    <h3 style="color: var(--color-accent); margin-bottom: 10px;">Información del Encuentro</h3>
+                    <p><strong>Lugar:</strong> Colegio de la Sagrada Familia</p>
+                    <p><strong>Dirección:</strong> [Añadir dirección exacta aquí]</p>
+                    <p><strong>Fecha:</strong> [Añadir fecha del evento]</p>
+                    <p><strong>Hora:</strong> [Añadir hora del evento]</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal Info -->
+    <div class="modal" id="info-modal">
+        <div class="modal-content">
+            <h2 id="modal-title" style="color: var(--color-navy); margin-bottom: 15px;"></h2>
+            <p id="modal-body" style="line-height: 1.6;"></p>
+            <button class="modal-close" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Lógica del menú lateral (responsivo)
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+        }
+
+        // Esconder menú al interactuar fuera de él en móviles
+        mainContent.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                // Si el clic no fue en el botón de hamburguesa
+                if (e.target.id !== 'menu-toggle') {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // Modales de información
+        function showModal(title, body) {
+            document.getElementById('modal-title').innerHTML = title;
+            document.getElementById('modal-body').innerHTML = body;
+            document.getElementById('info-modal').style.display = 'flex';
+            if (window.innerWidth <= 768) sidebar.classList.remove('active');
+        }
+
+        function closeModal() {
+            document.getElementById('info-modal').style.display = 'none';
+        }
+
+        // Navegación de vistas
+        function showForm() {
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('form-view').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        // Lógica de acompañantes
+        let companionCount = 0;
+        function addCompanion() {
+            if (companionCount >= 3) return;
+            
+            companionCount++;
+            const container = document.getElementById('companions-container');
+            
+            const html = `
+                <div class="companion-card" id="companion-${companionCount}">
+                    <h4>Acompañante ${companionCount}</h4>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>Parentesco</label>
+                        <select class="comp-parentesco" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" class="comp-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular</label>
+                        <input type="tel" class="comp-celular" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" class="comp-correo" required>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', html);
+
+            if (companionCount >= 3) {
+                document.getElementById('btn-add-companion').style.display = 'none';
+            }
+        }
+
+        // Envío del formulario
+        document.getElementById('reservation-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Cambiar el botón a estado de carga para evitar múltiples envíos
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Enviando reserva...";
+            submitBtn.disabled = true;
+            
+            // Recolección de datos
+            const aspiranteNombre = document.getElementById('aspiranteNombre').value;
+            const aspiranteGrado = document.getElementById('aspiranteGrado').value;
+            const aspiranteEdad = document.getElementById('aspiranteEdad').value;
+            const fuente = document.getElementById('fuenteInformacion').value;
+            
+            const fechaActual = new Date();
+            const fechaFormateada = fechaActual.toLocaleDateString('es-CO') + ' a las ' + fechaActual.toLocaleTimeString('es-CO');
+
+            let companionsHTML = '';
+            let companionsSheetText = ''; // Texto formateado para la celda de Google Sheets
+            
+            for(let i = 1; i <= companionCount; i++) {
+                const card = document.getElementById(`companion-${i}`);
+                if(card) {
+                    const parentesco = card.querySelector('.comp-parentesco').value;
+                    const nombre = card.querySelector('.comp-nombre').value;
+                    const celular = card.querySelector('.comp-celular').value;
+                    const correo = card.querySelector('.comp-correo').value;
+                    
+                    // HTML para mostrar al usuario al final
+                    companionsHTML += `<li><strong>${parentesco}:</strong> ${nombre}</li>`;
+                    // Texto plano con todos los datos para la celda de Google Sheets
+                    companionsSheetText += `${parentesco}: ${nombre} (Cel: ${celular}, Correo: ${correo})\n`;
+                }
+            }
+
+            if (companionsSheetText === '') companionsSheetText = 'Ninguno';
+
+            // Armar el paquete de datos para enviar
+            const formData = {
+                fecha: fechaFormateada,
+                aspiranteNombre: aspiranteNombre,
+                aspiranteGrado: aspiranteGrado,
+                aspiranteEdad: aspiranteEdad,
+                fuente: fuente,
+                acompanantes: companionsSheetText.trim()
+            };
+
+            // Tu URL de Google Apps Script
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3DBFms7ToEQOTlgDOaM6dr9INMXnhMDZaFOl6a5Ak4RYHmrXRCmdpQFrJD247nsk5Ww/exec';
+
+            // Enviar los datos usando Fetch API
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    // Usamos text/plain para evitar bloqueos de seguridad CORS del navegador
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    // Construir resumen visual para la pantalla de éxito
+                    const summaryHTML = `
+                        <p><strong>Fecha y hora de reserva:</strong> ${fechaFormateada}</p>
+                        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ccc;">
+                        <p><strong>Aspirante:</strong> ${aspiranteNombre} (${aspiranteEdad} años)</p>
+                        <p><strong>Grado:</strong> ${aspiranteGrado}</p>
+                        <p><strong>Acompañantes registrados (${companionCount}):</strong></p>
+                        <ul>${companionsHTML || '<li>Ninguno</li>'}</ul>
+                    `;
+
+                    document.getElementById('summary-content').innerHTML = summaryHTML;
+
+                    // Cambiar vistas
+                    document.getElementById('form-view').style.display = 'none';
+                    document.getElementById('success-view').style.display = 'block';
+                    window.scrollTo(0,0);
+                } else {
+                    alert('Hubo un error al guardar la reserva en la base de datos. Por favor, intenta de nuevo.');
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un problema de conexión. Por favor revisa tu internet e intenta de nuevo.');
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
